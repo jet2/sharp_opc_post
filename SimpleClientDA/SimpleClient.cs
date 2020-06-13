@@ -21,11 +21,16 @@ namespace Siemens.Opc.DaClient
 
     public partial class SimpleClientDA : Form
     {
-        List<string> all_tags = new List<string> {};
-        bool first = true; 
+        List<string> all_tags;
+        bool first = true;
+        string addr_post;
+
         static class Constants
         {
             public const int updaterate = 200;
+            public const string opc_server_exe="CCSsmRTServer";
+            public const string opc_server_name = "OPCServer.WinCC.1";
+            const string serverUrl = "opcda://localhost/OPCServer.WinCC.1";
         } 
 
 
@@ -103,10 +108,45 @@ namespace Siemens.Opc.DaClient
         public SimpleClientDA()
         {
             InitializeComponent();
-            
+            if (!loadConfig())
+            {
+                canclose = true;
+
+            };
             // set the sever we want to connet to
            // txtServerUrl.Text = serverUrl;
 
+        }
+
+        public bool loadConfig(){
+            lblOPCprogid.Text = Constants.opc_server_name;
+            string fn = System.IO.Path.GetDirectoryName(Environment.GetCommandLineArgs()[0]) + @"\config.txt";
+            
+            try
+            {
+                all_tags =new List<string>( File.ReadAllLines(fn, Encoding.UTF8));
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(fn+ " :: " + e.Message);
+                return false;
+            }
+            if (all_tags.Count > 1)
+            {
+                addr_post = all_tags[0];
+            }
+            all_tags.RemoveAt(0); 
+            lblWEBaddr.Text = addr_post;
+
+            foreach (string line in all_tags)
+            {
+                ListViewItem lvi = new ListViewItem();
+                lvi.Text = line;
+                lvi.SubItems.Add("0");
+                listView1.Items.Add(lvi);
+                listView1.Items[listView1.Items.Count - 1].SubItems[1].Text = "1";
+            }
+            return true;
         }
         #endregion
 
@@ -199,7 +239,7 @@ namespace Siemens.Opc.DaClient
                             }
                             else
                             {
-                                string d_line = GetTimeDate() + ";" + all_tags[value.ClientHandle] + ";" + value.Value.ToString();
+                                string d_line = GetTimeDate() + ";" + all_tags[value.ClientHandle] + ";" + value.Value.ToString() + ";" + value.GetType().ToString();
                                 // The node succeeded - print the value as string
                                 LogText(d_line);
                                 using (StreamWriter w = File.AppendText("data.csv")) 
@@ -236,7 +276,7 @@ namespace Siemens.Opc.DaClient
                     btnMonitor.Text = "Stop";
 
                     // disable changing the itemID
-                    txtMonitorTags.Enabled = false;
+                    //txtMonitorTags.Enabled = false;
 
                 }
                 catch (Exception exception)
@@ -247,7 +287,7 @@ namespace Siemens.Opc.DaClient
             }
             int idx = 0;
             all_tags.Clear();
-            foreach (string element in txtMonitorTags.Lines)
+            foreach (string element in clines)
             {
                 all_tags.Add(element);
                 // Add item 1
@@ -276,7 +316,7 @@ namespace Siemens.Opc.DaClient
                     m_Subscription = null;
 
                     btnMonitor.Text = "Monitor";
-                    txtMonitorTags.Enabled =  true;
+                    //txtMonitorTags.Enabled =  true;
                 }
                 catch (Exception ex)
                 {
@@ -292,7 +332,7 @@ namespace Siemens.Opc.DaClient
         private Server m_Server = null;
         private Subscription m_Subscription = null;
         private bool canclose = false;
-        const string serverUrl = "opcda://localhost/easyopc.da2.1";
+        
         #endregion
 
         public static string GetTimeDate()
@@ -309,16 +349,15 @@ namespace Siemens.Opc.DaClient
             }
 
         }
+
+
         public string UploadFile(string fn, string uriString)
         {
 
-            // Create a new WebClient instance.
-           // WebClient myWebClient = new WebClient();
 
-            //Console.WriteLine("\nPlease enter the fully qualified path of the file to be uploaded to the URL");
             string fileName = fn;
             string filetext;
-            //myWebClient.Headers.Add("user-agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; .NET CLR 1.0.3705;)");
+
             using (StreamReader sr = new StreamReader(fn))
             {
                 //This allows you to do one Read operation.
@@ -380,8 +419,8 @@ namespace Siemens.Opc.DaClient
                     //Your code here
                 });
                 myThread.Start();
-
-                MessageBox.Show(UploadFile(openFileDialog1.FileName, "http://localhost:8080/insopcdata"), "Response");
+                addr_post = "http://localhost:8080/insopcdata";
+                MessageBox.Show(UploadFile(openFileDialog1.FileName, addr_post), "Response");
             }
         }
 
@@ -393,8 +432,7 @@ namespace Siemens.Opc.DaClient
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            Process[] localByName = Process.GetProcessesByName("CCSsmRTServer");
-            checkBox1.Checked = localByName.Length > 0;
+
         }
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
@@ -436,6 +474,28 @@ namespace Siemens.Opc.DaClient
                 this.Hide(); 
             };    
 
+            
+        }
+
+        private void timer2_Tick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void check_exe_timer_Tick(object sender, EventArgs e)
+        {
+            Process[] localByName = Process.GetProcessesByName(Constants.opc_server_exe);
+            checkBox1.Checked = localByName.Length > 0;
+        }
+
+        private void timer3_Tick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void SimpleClientDA_Activated(object sender, EventArgs e)
+        {
+            if (canclose) { this.Close(); };
             
         }
     }
