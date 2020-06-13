@@ -238,7 +238,9 @@ namespace Siemens.Opc.DaClient
             // 
             // tmr_post
             // 
-            this.tmr_post.Tick += new System.EventHandler(this.timer2_Tick);
+            this.tmr_post.Enabled = true;
+            this.tmr_post.Interval = 2000;
+            this.tmr_post.Tick += new System.EventHandler(this.tmr_post_tick);
             // 
             // tmr_webping
             // 
@@ -374,9 +376,6 @@ namespace Siemens.Opc.DaClient
             this.listBox1.ColumnWidth = 50;
             this.listBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listBox1.FormattingEnabled = true;
-            this.listBox1.Items.AddRange(new object[] {
-            "j1",
-            "j2"});
             this.listBox1.Location = new System.Drawing.Point(0, 23);
             this.listBox1.Name = "listBox1";
             this.listBox1.Size = new System.Drawing.Size(366, 92);

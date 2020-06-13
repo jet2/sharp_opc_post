@@ -24,7 +24,7 @@ namespace Siemens.Opc.DaClient
         List<string> all_tags;
         bool first = true;
         string addr_post;
-
+        string thisAppFolder;
         static class Constants
         {
             public const int updaterate = 200;
@@ -142,10 +142,11 @@ namespace Siemens.Opc.DaClient
             {
                 ListViewItem lvi = new ListViewItem();
                 lvi.Text = line;
-                lvi.SubItems.Add("0");
+                lvi.SubItems.Add("-");
                 listView1.Items.Add(lvi);
-                listView1.Items[listView1.Items.Count - 1].SubItems[1].Text = "1";
+                //listView1.Items[listView1.Items.Count - 1].SubItems[1].Text = "1";
             }
+            thisAppFolder = System.IO.Path.GetDirectoryName(Environment.GetCommandLineArgs()[0]) + @"\";
             return true;
         }
         #endregion
@@ -239,10 +240,11 @@ namespace Siemens.Opc.DaClient
                             }
                             else
                             {
-                                string d_line = GetTimeDate() + ";" + all_tags[value.ClientHandle] + ";" + value.Value.ToString() + ";" + value.GetType().ToString();
+                                string d_line = GetTimeDate() + ";" + all_tags[value.ClientHandle] + ";" + value.Value.ToString() + ";" + value.ToString();
                                 // The node succeeded - print the value as string
                                 LogText(d_line);
-                                using (StreamWriter w = File.AppendText("data.csv")) 
+                                listView1.Items[value.ClientHandle].SubItems[1].Text = value.Value.ToString();
+                                using (StreamWriter w = File.AppendText(GetTimeDateFile()+".json")) 
                                 {
                                     w.WriteLine(d_line);
                                 }
@@ -286,10 +288,10 @@ namespace Siemens.Opc.DaClient
                 }
             }
             int idx = 0;
-            all_tags.Clear();
-            foreach (string element in clines)
+            //all_tags.Clear();
+            foreach (string element in all_tags)
             {
-                all_tags.Add(element);
+                //all_tags.Add(element);
                 // Add item 1
                 try
                 {
@@ -339,7 +341,14 @@ namespace Siemens.Opc.DaClient
         {
             string DateTime = System.DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss.fff");
             return DateTime;
+        }
+
+
+        public static string GetTimeDateFile()
+        {
+            return System.DateTime.Now.ToString("yyyy-MM-dd-HH-mm").Substring(0, 15);
         } 
+
 
         private void txtMonitorResults_TextChanged(object sender, EventArgs e)
         {
@@ -477,9 +486,14 @@ namespace Siemens.Opc.DaClient
             
         }
 
-        private void timer2_Tick(object sender, EventArgs e)
+        private void tmr_post_tick(object sender, EventArgs e)
         {
-
+            string[] filePaths = Directory.GetFiles(thisAppFolder, "*.json");
+            listBox1.Items.Clear();
+            foreach (string str in filePaths){
+                listBox1.Items.Add(Path.GetFileName(str));
+            }
+            
         }
 
         private void check_exe_timer_Tick(object sender, EventArgs e)
