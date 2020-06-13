@@ -11,7 +11,8 @@ using Siemens.Opc;
 using Siemens.Opc.Da;
 using System.IO;
 using System.Net;
-using System.Threading.Tasks;
+//using System.Threading.Tasks;
+using System.Diagnostics;
 
 
 namespace Siemens.Opc.DaClient
@@ -21,6 +22,7 @@ namespace Siemens.Opc.DaClient
     public partial class SimpleClientDA : Form
     {
         List<string> all_tags = new List<string> {};
+        bool first = true; 
         static class Constants
         {
             public const int updaterate = 200;
@@ -101,7 +103,7 @@ namespace Siemens.Opc.DaClient
         public SimpleClientDA()
         {
             InitializeComponent();
-
+            
             // set the sever we want to connet to
            // txtServerUrl.Text = serverUrl;
 
@@ -377,6 +379,28 @@ namespace Siemens.Opc.DaClient
 
                 MessageBox.Show(UploadFile(openFileDialog1.FileName, "http://localhost:8080/insopcdata"), "Response");
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            Process[] localByName = Process.GetProcessesByName("CCSsmRTServer");
+            checkBox1.Checked = localByName.Length > 0;
+        }
+
+        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
+        {
+            this.Show();
+        }
+
+        private void SimpleClientDA_Shown(object sender, EventArgs e)
+        {
+            if (first) { first = false; this.Hide(); }
         }
     }
 }

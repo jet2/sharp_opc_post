@@ -28,6 +28,7 @@ namespace Siemens.Opc.DaClient
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SimpleClientDA));
             this.btnConnect = new System.Windows.Forms.Button();
             this.btnMonitor = new System.Windows.Forms.Button();
@@ -39,6 +40,10 @@ namespace Siemens.Opc.DaClient
             this.txtServerUrl = new System.Windows.Forms.ComboBox();
             this.button1 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.button2 = new System.Windows.Forms.Button();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
             this.grpBoxBlockRead.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -59,7 +64,7 @@ namespace Siemens.Opc.DaClient
             this.btnMonitor.Enabled = false;
             this.btnMonitor.Location = new System.Drawing.Point(455, 13);
             this.btnMonitor.Name = "btnMonitor";
-            this.btnMonitor.Size = new System.Drawing.Size(86, 23);
+            this.btnMonitor.Size = new System.Drawing.Size(60, 23);
             this.btnMonitor.TabIndex = 24;
             this.btnMonitor.Text = "Monitor";
             this.btnMonitor.UseVisualStyleBackColor = true;
@@ -136,9 +141,9 @@ namespace Siemens.Opc.DaClient
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(556, 13);
+            this.button1.Location = new System.Drawing.Point(521, 14);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(124, 22);
+            this.button1.Size = new System.Drawing.Size(51, 22);
             this.button1.TabIndex = 26;
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
@@ -148,11 +153,45 @@ namespace Siemens.Opc.DaClient
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(578, 14);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(54, 27);
+            this.button2.TabIndex = 27;
+            this.button2.Text = "button2";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // checkBox1
+            // 
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(638, 19);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(80, 17);
+            this.checkBox1.TabIndex = 28;
+            this.checkBox1.Text = "checkBox1";
+            this.checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "notifyIcon1";
+            this.notifyIcon1.Visible = true;
+            this.notifyIcon1.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
+            // 
             // SimpleClientDA
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(716, 309);
+            this.Controls.Add(this.checkBox1);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.txtServerUrl);
             this.Controls.Add(this.grpBoxBlockRead);
@@ -160,6 +199,7 @@ namespace Siemens.Opc.DaClient
             this.Controls.Add(this.btnMonitor);
             this.Name = "SimpleClientDA";
             this.Text = "Simple Client OPC COM DA";
+            this.Shown += new System.EventHandler(this.SimpleClientDA_Shown);
             this.grpBoxBlockRead.ResumeLayout(false);
             this.grpBoxBlockRead.PerformLayout();
             this.ResumeLayout(false);
@@ -179,6 +219,10 @@ namespace Siemens.Opc.DaClient
         private System.Windows.Forms.ComboBox txtServerUrl;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
     }
 }
 
