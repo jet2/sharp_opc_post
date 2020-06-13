@@ -11,7 +11,7 @@ using Siemens.Opc;
 using Siemens.Opc.Da;
 using System.IO;
 using System.Net;
-//using System.Threading.Tasks;
+using System.Threading;
 using System.Diagnostics;
 
 
@@ -291,7 +291,7 @@ namespace Siemens.Opc.DaClient
         #region Private Members
         private Server m_Server = null;
         private Subscription m_Subscription = null;
-
+        private bool canclose = false;
         const string serverUrl = "opcda://localhost/easyopc.da2.1";
         #endregion
 
@@ -375,7 +375,11 @@ namespace Siemens.Opc.DaClient
 
                 // Add a user agent header in case the
                 // requested URI contains a query.
-
+                Thread myThread = new System.Threading.Thread(delegate()
+                {
+                    //Your code here
+                });
+                myThread.Start();
 
                 MessageBox.Show(UploadFile(openFileDialog1.FileName, "http://localhost:8080/insopcdata"), "Response");
             }
@@ -400,7 +404,39 @@ namespace Siemens.Opc.DaClient
 
         private void SimpleClientDA_Shown(object sender, EventArgs e)
         {
-            if (first) { first = false; this.Hide(); }
+            if (first) { 
+                first = false; this.Hide(); 
+            }
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+        }
+
+        private void toolStripMenuItem2_Click(object sender, EventArgs e)
+        {
+            this.Show();
+        }
+
+        private void toolStripMenuItem3_Click(object sender, EventArgs e)
+        {
+            canclose = true;
+            this.Close();
+        }
+
+        private void SimpleClientDA_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            e.Cancel = true;
+            if (canclose)
+            {
+                e.Cancel = false;
+            }
+            else { 
+                this.Hide(); 
+            };    
+
+            
         }
     }
 }
