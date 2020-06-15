@@ -230,7 +230,7 @@ namespace Siemens.Opc.DaClient
                             if (value.Error != 0)
                             {
                                 // The node failed - print the symbolic name of the status code
-                                string e_line = GetTimeDate() + " " + all_tags[value.ClientHandle] + " Error: 0x" + value.Error.ToString("X"); 
+                                string e_line = GetNowString() + " " + all_tags[value.ClientHandle] + " Error: 0x" + value.Error.ToString("X"); 
                                 LogText(e_line);
                                 using (StreamWriter we = File.AppendText("errors.log"))
                                 {
@@ -240,7 +240,7 @@ namespace Siemens.Opc.DaClient
                             }
                             else
                             {
-                                string d_line = GetTimeDate() + ";" + all_tags[value.ClientHandle] + ";" + value.Value.ToString() + ";" + value.ToString();
+                                string d_line = GetNowString() + ";" + all_tags[value.ClientHandle] + ";" + value.Value.ToString() + ";" + value.ToString();
                                 // The node succeeded - print the value as string
                                 LogText(d_line);
                                 listView1.Items[value.ClientHandle].SubItems[1].Text = value.Value.ToString();
@@ -334,10 +334,15 @@ namespace Siemens.Opc.DaClient
         private Server m_Server = null;
         private Subscription m_Subscription = null;
         private bool canclose = false;
-        
+        private string MachineName = Environment.MachineName;
         #endregion
 
-        public static string GetTimeDate()
+        public static string GetNowTimestampString()
+        {
+            return ((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds).ToString();
+        }
+
+        public static string GetNowString()
         {
             string DateTime = System.DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss.fff");
             return DateTime;
@@ -396,7 +401,7 @@ namespace Siemens.Opc.DaClient
             // Get the response.
             WebResponse response = request.GetResponse();
             // Display the status.
-            Console.WriteLine(((HttpWebResponse)response).StatusDescription);
+            //Console.WriteLine(((HttpWebResponse)response).StatusDescription);
 
             // Get the stream containing content returned by the server.
             // The using block ensures the stream is automatically closed.
@@ -407,27 +412,28 @@ namespace Siemens.Opc.DaClient
                 // Read the content.
                 responseFromServer = reader.ReadToEnd();
                 // Display the content.
-                Console.WriteLine(responseFromServer);
+               // Console.WriteLine(responseFromServer);
             }
 
             // Close the response.
             response.Close();
             return responseFromServer;
-
         }
+
+
         private void button1_Click(object sender, EventArgs e)
         {
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                WebClient client = new WebClient();
+               // WebClient client = new WebClient();
 
                 // Add a user agent header in case the
                 // requested URI contains a query.
-                Thread myThread = new System.Threading.Thread(delegate()
-                {
-                    //Your code here
-                });
-                myThread.Start();
+                //Thread myThread = new System.Threading.Thread(delegate()
+                //{
+                //    //Your code here
+                //});
+                //myThread.Start();
                 addr_post = "http://localhost:8080/insopcdata";
                 MessageBox.Show(UploadFile(openFileDialog1.FileName, addr_post), "Response");
             }
@@ -500,17 +506,74 @@ namespace Siemens.Opc.DaClient
         {
             Process[] localByName = Process.GetProcessesByName(Constants.opc_server_exe);
             checkBox1.Checked = localByName.Length > 0;
+
+            string state = "1";
+            try
+            {
+                state = m_Server.Read(all_tags[0]).ToString();
+                lblOPCstate.Text = "OK";
+            }
+            catch
+            {
+                lblOPCstate.Text = "Bad";
+            }
+            
         }
 
         private void timer3_Tick(object sender, EventArgs e)
         {
+            tmr_webping.Enabled = false;
+            Uri myUri = new Uri(lblWEBaddr.Text);
+            // Get host part (host name or address and port). Returns "server:8080".
+
+            var client = new WebClient();
+
+
+    // Specify that the DownloadStringCallback2 method gets called
+    // when the download completes.
+            string mystring = "000";
+            client.DownloadStringCompleted += 
+                    (s, hdlr_e) => {
+                        try
+                        {
+                            var result = hdlr_e.Result;
+                            mystring = result.ToString();
+                        }
+                        catch
+                        {
+                            mystring = "000";
+                        }
+
+                        lblWEBstate.Text = "Bad " + mystring;
+                        if (mystring == "777")
+                        {
+                            lblWEBstate.Text = "OK " + mystring;
+                        }
+                        tmr_webping.Enabled = true;
+                    };
+
+
+            try
+            {
+                client.DownloadStringAsync(new Uri("http://" + myUri.Authority));
+            }
+            catch (Exception ex)
+            {
+
+                LogText("Stopping data monitoring failed:\n\n" + ex.Message);
+            };
 
         }
 
         private void SimpleClientDA_Activated(object sender, EventArgs e)
         {
             if (canclose) { this.Close(); };
-            
+
+        }
+
+        private void toolStripMenuItem4_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

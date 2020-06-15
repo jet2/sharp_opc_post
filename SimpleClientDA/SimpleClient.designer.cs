@@ -54,13 +54,12 @@ namespace Siemens.Opc.DaClient
             this.toolStripStatusLabel7 = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip2 = new System.Windows.Forms.StatusStrip();
             this.lblOPCprogid = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblOPCstate = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip3 = new System.Windows.Forms.StatusStrip();
             this.lblWEBaddr = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel6 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.lblWEBstate = new System.Windows.Forms.ToolStripStatusLabel();
             this.mainMenu = new System.Windows.Forms.MenuStrip();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.label2 = new System.Windows.Forms.Label();
@@ -68,6 +67,8 @@ namespace Siemens.Opc.DaClient
             this.x1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.x2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label3 = new System.Windows.Forms.Label();
+            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripMenuItem();
             this.grpBoxBlockRead.SuspendLayout();
             this.trayMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -165,7 +166,7 @@ namespace Siemens.Opc.DaClient
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(51, 24);
             this.button1.TabIndex = 26;
-            this.button1.Text = "button1";
+            this.button1.Text = "post";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -196,6 +197,7 @@ namespace Siemens.Opc.DaClient
             // tmr_check_exe
             // 
             this.tmr_check_exe.Enabled = true;
+            this.tmr_check_exe.Interval = 500;
             this.tmr_check_exe.Tick += new System.EventHandler(this.check_exe_timer_Tick);
             // 
             // notifyIcon1
@@ -244,6 +246,8 @@ namespace Siemens.Opc.DaClient
             // 
             // tmr_webping
             // 
+            this.tmr_webping.Enabled = true;
+            this.tmr_webping.Interval = 5000;
             this.tmr_webping.Tick += new System.EventHandler(this.timer3_Tick);
             // 
             // statusStrip1
@@ -278,7 +282,7 @@ namespace Siemens.Opc.DaClient
             // 
             this.statusStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblOPCprogid,
-            this.toolStripStatusLabel4});
+            this.lblOPCstate});
             this.statusStrip2.Location = new System.Drawing.Point(0, 372);
             this.statusStrip2.Name = "statusStrip2";
             this.statusStrip2.Size = new System.Drawing.Size(712, 22);
@@ -293,17 +297,17 @@ namespace Siemens.Opc.DaClient
             this.lblOPCprogid.Text = "[-]";
             this.lblOPCprogid.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             // 
-            // toolStripStatusLabel4
+            // lblOPCstate
             // 
-            this.toolStripStatusLabel4.Name = "toolStripStatusLabel4";
-            this.toolStripStatusLabel4.Size = new System.Drawing.Size(23, 17);
-            this.toolStripStatusLabel4.Text = "OK";
+            this.lblOPCstate.Name = "lblOPCstate";
+            this.lblOPCstate.Size = new System.Drawing.Size(23, 17);
+            this.lblOPCstate.Text = "OK";
             // 
             // statusStrip3
             // 
             this.statusStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblWEBaddr,
-            this.toolStripStatusLabel6});
+            this.lblWEBstate});
             this.statusStrip3.Location = new System.Drawing.Point(0, 350);
             this.statusStrip3.Name = "statusStrip3";
             this.statusStrip3.Size = new System.Drawing.Size(712, 22);
@@ -319,17 +323,16 @@ namespace Siemens.Opc.DaClient
             this.lblWEBaddr.Text = "[-]";
             this.lblWEBaddr.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             // 
-            // toolStripStatusLabel6
+            // lblWEBstate
             // 
-            this.toolStripStatusLabel6.Name = "toolStripStatusLabel6";
-            this.toolStripStatusLabel6.Size = new System.Drawing.Size(23, 17);
-            this.toolStripStatusLabel6.Text = "OK";
+            this.lblWEBstate.Name = "lblWEBstate";
+            this.lblWEBstate.Size = new System.Drawing.Size(23, 17);
+            this.lblWEBstate.Text = "OK";
             // 
             // mainMenu
             // 
             this.mainMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItem4,
-            this.toolStripMenuItem5});
+            this.toolStripMenuItem4});
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.Size = new System.Drawing.Size(712, 24);
@@ -338,15 +341,14 @@ namespace Siemens.Opc.DaClient
             // 
             // toolStripMenuItem4
             // 
+            this.toolStripMenuItem4.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem6,
+            this.toolStripMenuItem7});
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(125, 20);
-            this.toolStripMenuItem4.Text = "toolStripMenuItem4";
-            // 
-            // toolStripMenuItem5
-            // 
-            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(125, 20);
-            this.toolStripMenuItem5.Text = "toolStripMenuItem5";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(53, 20);
+            this.toolStripMenuItem4.Text = "Меню";
+            this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
+            this.toolStripMenuItem4.DoubleClick += new System.EventHandler(this.toolStripMenuItem3_Click);
             // 
             // splitContainer1
             // 
@@ -429,6 +431,19 @@ namespace Siemens.Opc.DaClient
             this.label3.Text = "OPC Tags";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // toolStripMenuItem6
+            // 
+            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItem6.Text = "Настройки";
+            // 
+            // toolStripMenuItem7
+            // 
+            this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+            this.toolStripMenuItem7.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItem7.Text = "Выход";
+            this.toolStripMenuItem7.Click += new System.EventHandler(this.toolStripMenuItem3_Click);
+            // 
             // SimpleClientDA
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -496,13 +511,12 @@ namespace Siemens.Opc.DaClient
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.StatusStrip statusStrip2;
         private System.Windows.Forms.ToolStripStatusLabel lblOPCprogid;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
+        private System.Windows.Forms.ToolStripStatusLabel lblOPCstate;
         private System.Windows.Forms.StatusStrip statusStrip3;
         private System.Windows.Forms.ToolStripStatusLabel lblWEBaddr;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel6;
+        private System.Windows.Forms.ToolStripStatusLabel lblWEBstate;
         private System.Windows.Forms.MenuStrip mainMenu;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel7;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ListBox listBox1;
@@ -511,6 +525,8 @@ namespace Siemens.Opc.DaClient
         private System.Windows.Forms.ColumnHeader x1;
         private System.Windows.Forms.ColumnHeader x2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem6;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem7;
     }
 }
 
