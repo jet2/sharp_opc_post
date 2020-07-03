@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "COMDAClientAPI", "DAClientAPI\COMDAClientAPI.csproj", "{9985A963-594F-4A19-BBAC-C1BE7FBCDD06}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleClientCOMDA", "SimpleClientDA\SimpleClientCOMDA.csproj", "{4973AEB7-7BAD-43DA-97E6-346311869080}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventsTest", "EventsTest\EventsTest.csproj", "{A435311B-C3A4-4693-B032-579D3BFFEB55}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProcessQueue", "..\..\ProcessQueue\ProcessQueue.csproj", "{FB5DF065-D4B9-4E8F-8CDA-925B409165DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -55,16 +53,6 @@ Global
 		{A435311B-C3A4-4693-B032-579D3BFFEB55}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{A435311B-C3A4-4693-B032-579D3BFFEB55}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A435311B-C3A4-4693-B032-579D3BFFEB55}.Release|x86.ActiveCfg = Release|Any CPU
-		{FB5DF065-D4B9-4E8F-8CDA-925B409165DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FB5DF065-D4B9-4E8F-8CDA-925B409165DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FB5DF065-D4B9-4E8F-8CDA-925B409165DC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{FB5DF065-D4B9-4E8F-8CDA-925B409165DC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{FB5DF065-D4B9-4E8F-8CDA-925B409165DC}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{FB5DF065-D4B9-4E8F-8CDA-925B409165DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FB5DF065-D4B9-4E8F-8CDA-925B409165DC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FB5DF065-D4B9-4E8F-8CDA-925B409165DC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{FB5DF065-D4B9-4E8F-8CDA-925B409165DC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{FB5DF065-D4B9-4E8F-8CDA-925B409165DC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
