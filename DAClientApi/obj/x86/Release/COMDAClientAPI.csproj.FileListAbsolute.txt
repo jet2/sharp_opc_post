@@ -1,0 +1,10 @@
+D:\_OnlineSupp\21043779_Csharp_OPCClient_RCW_CODE\OpcClientDA_V2\src\DAClientAPI\bin\Release\ClientAPI.dll
+D:\_OnlineSupp\21043779_Csharp_OPCClient_RCW_CODE\OpcClientDA_V2\src\DAClientAPI\bin\Release\ClientAPI.pdb
+D:\_OnlineSupp\21043779_Csharp_OPCClient_RCW_CODE\OpcClientDA_V2\src\DAClientAPI\obj\x86\Release\ClientAPI.dll
+D:\_OnlineSupp\21043779_Csharp_OPCClient_RCW_CODE\OpcClientDA_V2\src\DAClientAPI\obj\x86\Release\ClientAPI.pdb
+D:\_OnlineSupp\21043779_Csharp_OPCClient_RCW_CODE\OpcClientDA_V2\src\DAClientAPI\obj\x86\Release\COMDAClientAPI.csprojResolveAssemblyReference.cache
+E:\VSProjects\OpcClientDA_V2\src\DAClientAPI\bin\Release\ClientAPI.dll
+E:\VSProjects\OpcClientDA_V2\src\DAClientAPI\bin\Release\ClientAPI.pdb
+E:\VSProjects\OpcClientDA_V2\src\DAClientAPI\obj\x86\Release\ClientAPI.dll
+E:\VSProjects\OpcClientDA_V2\src\DAClientAPI\obj\x86\Release\ClientAPI.pdb
+E:\VSProjects\OpcClientDA_V2\src\DAClientAPI\obj\x86\Release\COMDAClientAPI.csprojResolveAssemblyReference.cache

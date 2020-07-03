@@ -347,7 +347,7 @@ namespace Siemens.Opc.DaClient
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
             this.toolStripMenuItem4.Size = new System.Drawing.Size(53, 20);
             this.toolStripMenuItem4.Text = "Μενώ";
-            this.toolStripMenuItem4.Click += new System.EventHandler(this.toolStripMenuItem4_Click);
+            
             this.toolStripMenuItem4.DoubleClick += new System.EventHandler(this.toolStripMenuItem3_Click);
             // 
             // splitContainer1

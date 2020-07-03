@@ -25,6 +25,8 @@ namespace Siemens.Opc.DaClient
         bool first = true;
         string addr_post;
         string thisAppFolder;
+        ManualResetEvent mre;
+        ProcessQueue<string> queue = new ProcessQueue<string>(FileHandler);
         static class Constants
         {
             public const int updaterate = 200;
@@ -73,6 +75,7 @@ namespace Siemens.Opc.DaClient
         /// </summary>
         private void OnDisconnect()
         {
+            
             if (m_Server == null)
             {
                 return;
@@ -571,9 +574,6 @@ namespace Siemens.Opc.DaClient
 
         }
 
-        private void toolStripMenuItem4_Click(object sender, EventArgs e)
-        {
 
-        }
     }
 }

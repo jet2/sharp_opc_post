@@ -1,0 +1,10 @@
+D:\_OnlineSupp\21043779_Csharp_OPCClient_RCW_CODE\OpcClientDA_V2\src\DAClientAPI\bin\Debug\ClientAPI.dll
+D:\_OnlineSupp\21043779_Csharp_OPCClient_RCW_CODE\OpcClientDA_V2\src\DAClientAPI\bin\Debug\ClientAPI.pdb
+D:\_OnlineSupp\21043779_Csharp_OPCClient_RCW_CODE\OpcClientDA_V2\src\DAClientAPI\obj\x86\Debug\ResolveAssemblyReference.cache
+D:\_OnlineSupp\21043779_Csharp_OPCClient_RCW_CODE\OpcClientDA_V2\src\DAClientAPI\obj\x86\Debug\ClientAPI.dll
+D:\_OnlineSupp\21043779_Csharp_OPCClient_RCW_CODE\OpcClientDA_V2\src\DAClientAPI\obj\x86\Debug\ClientAPI.pdb
+E:\VSProjects\OpcClientDA_V2\src\DAClientAPI\bin\Debug\ClientAPI.dll
+E:\VSProjects\OpcClientDA_V2\src\DAClientAPI\bin\Debug\ClientAPI.pdb
+E:\VSProjects\OpcClientDA_V2\src\DAClientAPI\obj\x86\Debug\COMDAClientAPI.csprojResolveAssemblyReference.cache
+E:\VSProjects\OpcClientDA_V2\src\DAClientAPI\obj\x86\Debug\ClientAPI.dll
+E:\VSProjects\OpcClientDA_V2\src\DAClientAPI\obj\x86\Debug\ClientAPI.pdb

@@ -1,0 +1,8 @@
+E:\VSProjects\OpcClientDA_V2\src\EventsTest\bin\Debug\EventsTest.exe
+E:\VSProjects\OpcClientDA_V2\src\EventsTest\bin\Debug\EventsTest.pdb
+E:\VSProjects\OpcClientDA_V2\src\EventsTest\obj\Debug\EventsTest.csprojResolveAssemblyReference.cache
+E:\VSProjects\OpcClientDA_V2\src\EventsTest\obj\Debug\EventsTest.Properties.Resources.resources
+E:\VSProjects\OpcClientDA_V2\src\EventsTest\obj\Debug\EventsTest.csproj.GenerateResource.Cache
+E:\VSProjects\OpcClientDA_V2\src\EventsTest\obj\Debug\EventsTest.exe
+E:\VSProjects\OpcClientDA_V2\src\EventsTest\obj\Debug\EventsTest.pdb
+E:\VSProjects\OpcClientDA_V2\src\EventsTest\obj\Debug\EventsTest.Form1.resources
