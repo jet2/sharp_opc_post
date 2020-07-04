@@ -90,7 +90,7 @@ namespace Siemens.Opc.DaClient
         }
     }
 
-    public class ClientTcp
+    class ClientTcp
     {
         #region Construction
 
@@ -181,6 +181,14 @@ namespace Siemens.Opc.DaClient
             Console.WriteLine("Запрос завершен...");
             Console.Read();
         }
+        #endregion
     }
-    #endregion
+    
+    class TCPChannel
+    {
+        public TCPChannel(Queue SendingQ, Queue ReceivingQ)
+        {
+            // 2 анонимных потока: серверный и черпальщик из "очереди в сеть", с созданием клиента для отправки
+        }
+    } 
 }
