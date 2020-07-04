@@ -19,3 +19,16 @@ E:\VSProjects\OpcClientDA_V2\src\SimpleClientDA\obj\x86\Debug\SimpleClientCOMDA.
 E:\VSProjects\OpcClientDA_V2\src\SimpleClientDA\obj\x86\Debug\Siemens.Opc.DaClient.Properties.Resources.resources
 E:\VSProjects\OpcClientDA_V2\src\SimpleClientDA\obj\x86\Debug\Siemens.Opc.DaClient.SimpleClientDA.resources
 E:\VSProjects\OpcClientDA_V2\src\SimpleClientDA\obj\x86\Debug\SimpleClientCOMDA.csproj.GenerateResource.Cache
+D:\VSProjects\sharp_opc_post\SimpleClientDA\bin\Debug\DAClient.exe.config
+D:\VSProjects\sharp_opc_post\SimpleClientDA\obj\x86\Debug\SimpleClientCOMDA.csprojResolveAssemblyReference.cache
+D:\VSProjects\sharp_opc_post\SimpleClientDA\obj\x86\Debug\Siemens.Opc.DaClient.Properties.Resources.resources
+D:\VSProjects\sharp_opc_post\SimpleClientDA\obj\x86\Debug\Siemens.Opc.DaClient.SimpleClientDA.resources
+D:\VSProjects\sharp_opc_post\SimpleClientDA\obj\x86\Debug\SimpleClientCOMDA.csproj.GenerateResource.Cache
+D:\VSProjects\sharp_opc_post\SimpleClientDA\bin\Debug\DAClient.exe
+D:\VSProjects\sharp_opc_post\SimpleClientDA\bin\Debug\DAClient.pdb
+D:\VSProjects\sharp_opc_post\SimpleClientDA\bin\Debug\ClientAPI.dll
+D:\VSProjects\sharp_opc_post\SimpleClientDA\bin\Debug\OpcRcw.Comn.dll
+D:\VSProjects\sharp_opc_post\SimpleClientDA\bin\Debug\OpcRcw.Da.dll
+D:\VSProjects\sharp_opc_post\SimpleClientDA\bin\Debug\ClientAPI.pdb
+D:\VSProjects\sharp_opc_post\SimpleClientDA\obj\x86\Debug\DAClient.exe
+D:\VSProjects\sharp_opc_post\SimpleClientDA\obj\x86\Debug\DAClient.pdb

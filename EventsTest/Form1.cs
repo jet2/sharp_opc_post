@@ -83,6 +83,14 @@ namespace EventsTest
             // Wait for the thread to terminate.
             t.Join();
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            int intValue = 100500;
+            string hexValue = intValue.ToString("X8");
+            int myNewInt = Convert.ToInt32(hexValue, 16);
+            MessageBox.Show(hexValue+" / "+ myNewInt.ToString());
+        }
     }
 
     #region Threading

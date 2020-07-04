@@ -6,3 +6,10 @@ E:\VSProjects\OpcClientDA_V2\src\EventsTest\obj\Debug\EventsTest.csproj.Generate
 E:\VSProjects\OpcClientDA_V2\src\EventsTest\obj\Debug\EventsTest.exe
 E:\VSProjects\OpcClientDA_V2\src\EventsTest\obj\Debug\EventsTest.pdb
 E:\VSProjects\OpcClientDA_V2\src\EventsTest\obj\Debug\EventsTest.Form1.resources
+D:\VSProjects\sharp_opc_post\EventsTest\obj\Debug\EventsTest.exe
+D:\VSProjects\sharp_opc_post\EventsTest\obj\Debug\EventsTest.pdb
+D:\VSProjects\sharp_opc_post\EventsTest\bin\Debug\EventsTest.exe
+D:\VSProjects\sharp_opc_post\EventsTest\bin\Debug\EventsTest.pdb
+D:\VSProjects\sharp_opc_post\EventsTest\obj\Debug\EventsTest.Form1.resources
+D:\VSProjects\sharp_opc_post\EventsTest\obj\Debug\EventsTest.Properties.Resources.resources
+D:\VSProjects\sharp_opc_post\EventsTest\obj\Debug\EventsTest.csproj.GenerateResource.Cache

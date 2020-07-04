@@ -8,3 +8,10 @@ E:\VSProjects\OpcClientDA_V2\src\DAClientAPI\bin\Debug\ClientAPI.pdb
 E:\VSProjects\OpcClientDA_V2\src\DAClientAPI\obj\x86\Debug\COMDAClientAPI.csprojResolveAssemblyReference.cache
 E:\VSProjects\OpcClientDA_V2\src\DAClientAPI\obj\x86\Debug\ClientAPI.dll
 E:\VSProjects\OpcClientDA_V2\src\DAClientAPI\obj\x86\Debug\ClientAPI.pdb
+D:\VSProjects\sharp_opc_post\DAClientAPI\bin\Debug\ClientAPI.dll
+D:\VSProjects\sharp_opc_post\DAClientAPI\bin\Debug\ClientAPI.pdb
+D:\VSProjects\sharp_opc_post\DAClientAPI\bin\Debug\OpcRcw.Comn.dll
+D:\VSProjects\sharp_opc_post\DAClientAPI\bin\Debug\OpcRcw.Da.dll
+D:\VSProjects\sharp_opc_post\DAClientAPI\obj\x86\Debug\COMDAClientAPI.csprojResolveAssemblyReference.cache
+D:\VSProjects\sharp_opc_post\DAClientAPI\obj\x86\Debug\ClientAPI.dll
+D:\VSProjects\sharp_opc_post\DAClientAPI\obj\x86\Debug\ClientAPI.pdb

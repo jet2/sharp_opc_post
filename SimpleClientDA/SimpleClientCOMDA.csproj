@@ -107,7 +107,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="SenderTcp.cs" />
+    <Compile Include="Additional.cs" />
+    <Compile Include="NetworkingTcp.cs" />
     <Compile Include="SimpleClient.cs">
       <SubType>Form</SubType>
     </Compile>
