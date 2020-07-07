@@ -233,7 +233,7 @@ namespace Siemens.Opc.DaClient
                             if (value.Error != 0)
                             {
                                 // The node failed - print the symbolic name of the status code
-                                string e_line = GetNowString() + " " + all_tags[value.ClientHandle] + " Error: 0x" + value.Error.ToString("X"); 
+                                string e_line = dtTools.GetNowString() + " " + all_tags[value.ClientHandle] + " Error: 0x" + value.Error.ToString("X"); 
                                 LogText(e_line);
                                 using (StreamWriter we = File.AppendText("errors.log"))
                                 {
@@ -243,11 +243,11 @@ namespace Siemens.Opc.DaClient
                             }
                             else
                             {
-                                string d_line = GetNowString() + ";" + all_tags[value.ClientHandle] + ";" + value.Value.ToString() + ";" + value.ToString();
+                                string d_line = dtTools.GetNowString() + ";" + all_tags[value.ClientHandle] + ";" + value.Value.ToString() + ";" + value.ToString();
                                 // The node succeeded - print the value as string
                                 LogText(d_line);
                                 listView1.Items[value.ClientHandle].SubItems[1].Text = value.Value.ToString();
-                                using (StreamWriter w = File.AppendText(GetTimeDateFile()+".json")) 
+                                using (StreamWriter w = File.AppendText(dtTools.GetTimeDateFile()+".json")) 
                                 {
                                     w.WriteLine(d_line);
                                 }
@@ -263,12 +263,7 @@ namespace Siemens.Opc.DaClient
         #endregion
 
         #region Internal Helper Methods
-        void LogText(string output)
-        {
-            txtMonitorResults.AppendText("\r\n" + output);
-            txtMonitorResults.ScrollToCaret();
 
-        } 
         void startMonitorItems()
         {
             // Check if we have a subscription. If not - create a new subscription.
@@ -340,22 +335,7 @@ namespace Siemens.Opc.DaClient
         private string MachineName = Environment.MachineName;
         #endregion
 
-        public static string GetNowTimestampString()
-        {
-            return ((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds).ToString();
-        }
 
-        public static string GetNowString()
-        {
-            string DateTime = System.DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss.fff");
-            return DateTime;
-        }
-
-
-        public static string GetTimeDateFile()
-        {
-            return System.DateTime.Now.ToString("yyyy-MM-dd-HH-mm").Substring(0, 15);
-        } 
 
 
         private void txtMonitorResults_TextChanged(object sender, EventArgs e)
@@ -521,6 +501,11 @@ namespace Siemens.Opc.DaClient
 
         }
 
+        void LogText(string output)
+        {
+            txtMonitorResults.AppendText("\r\n" + output);
+            txtMonitorResults.ScrollToCaret();
 
+        }
     }
 }
