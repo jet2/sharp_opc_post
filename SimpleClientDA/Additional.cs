@@ -31,6 +31,7 @@ namespace Siemens.Opc.DaClient
     
     class dtTools
     {
+        public string MachineName = Environment.MachineName;
         public static string GetNowTimestampString()
         {
             return ((Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds).ToString();
@@ -47,5 +48,6 @@ namespace Siemens.Opc.DaClient
         {
             return System.DateTime.Now.ToString("yyyy-MM-dd-HH-mm").Substring(0, 15);
         }
+        
     }
 }

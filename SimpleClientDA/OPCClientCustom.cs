@@ -9,9 +9,13 @@ namespace Siemens.Opc.DaClient
     static class Constants
     {
         public const int updaterate = 200;
+        public const string MasterStateTagname = "@RM_STATE";
         public const string opc_server_exe = "CCSsmRTServer";
         public const string opc_server_name = "OPCServer.WinCC.1";
         const string serverUrl = "opcda://localhost/OPCServer.WinCC.1";
+        const string serverUrlPrefix = "opcda://localhost/";
+        
+
     }
 
     // class StateRedundancyController вынесен в additional
@@ -21,9 +25,52 @@ namespace Siemens.Opc.DaClient
         #region Private Members
         private Server m_Server = null;
         private Subscription m_Subscription = null;
-        private bool canclose = false;
-        private string MachineName = Environment.MachineName;
+        private bool subscribed = false;
         #endregion
+
+        #region Server public methods
+
+        public bool Connect(string progid)
+        {
+            m_Server.Connect(progid);
+            return true;
+        }
+
+        public int CheckConnect()
+        {
+            int result = 0;
+
+            try
+            {
+                DataValue xDataValue = (DataValue)m_Server.Read(Constants.MasterStateTagname);
+            }
+            catch
+            {
+                result = 2;
+            }
+             
+            return result;
+        }
+
+        public bool Subscribe()
+        {
+            bool result = true;
+
+            try
+            {
+                DataValue xDataValue = (DataValue)m_Server.Read(Constants.MasterStateTagname);
+            }
+            catch
+            {
+                result = false;
+            }
+
+            return result;
+        }
+
+        #endregion
+
+
         #region Connect and Disconnect Server
         /// <summary>
         /// Handles connect procedure
@@ -39,14 +86,7 @@ namespace Siemens.Opc.DaClient
             try
             {
                 // connect to the server
-                m_Server.Connect(txtServerUrl.Text);
-
-                // Change GUI settings
-                btnConnect.Text = "Disconnect";
-                txtServerUrl.Enabled = false;
-
-                // enable buttons
-                btnMonitor.Enabled = true;
+                m_Server.Connect(Constants.opc_server_name);
 
             }
             catch (Exception exception)
@@ -54,8 +94,67 @@ namespace Siemens.Opc.DaClient
                 // Cleanup
                 m_Server = null;
 
-                MessageBox.Show(exception.Message, "Connect failed");
+//                MessageBox.Show(exception.Message, "Connect failed");
             }
+        }
+
+        public bool startMonitorItems(List<string> tags_list)
+        {
+            bool result = true;
+            // Check if we have a subscription. If not - create a new subscription.
+            if (m_Subscription == null)
+            {
+                try
+                {
+                    // Create subscription
+                    m_Subscription = m_Server.CreateSubscription("ReadGroup", Constants.updaterate, OnDataChange);
+
+                }
+                catch (Exception exception)
+                {
+                    result = false;
+                }
+            }
+            int idx = 0;
+            //all_tags.Clear();
+            foreach (string element in tags_list)
+            {
+                //all_tags.Add(element);
+                // Add item 1
+                try
+                {
+                    m_Subscription.AddItem(
+                        element,
+                        idx);
+                }
+                catch (Exception exception)
+                {
+                    result = false;
+                    //LogText("[" + element + "]," + exception.Message);
+
+                }
+                idx++;
+            }
+
+            return result;
+        }
+
+        bool stopMonitorItems()
+        {
+            bool result = false;
+            if (m_Subscription != null)
+            {
+                try
+                {
+                    m_Server.DeleteSubscription(m_Subscription);
+                    m_Subscription = null;
+                }
+                catch (Exception ex)
+                {
+                    result = false;
+                }
+            }
+            return result;
         }
 
         /// <summary>
@@ -75,12 +174,12 @@ namespace Siemens.Opc.DaClient
                 stopMonitorItems();
 
 
-                // Change GUI settings
-                btnConnect.Text = "Connect";
-                txtServerUrl.Enabled = true;
+                //// Change GUI settings
+                //btnConnect.Text = "Connect";
+                //txtServerUrl.Enabled = true;
 
-                // disable buttons
-                btnMonitor.Enabled = false;
+                //// disable buttons
+                //btnMonitor.Enabled = false;
 
                 // Disconnect
                 m_Server.Disconnect();
@@ -90,7 +189,7 @@ namespace Siemens.Opc.DaClient
             }
             catch (Exception exception)
             {
-                LogText(exception.Message + " Disconnect failed");
+                //LogText(exception.Message + " Disconnect failed");
             }
         }
         #endregion
@@ -160,65 +259,5 @@ namespace Siemens.Opc.DaClient
 
         #region Internal Helper Methods
 
-        void startMonitorItems()
-        {
-            // Check if we have a subscription. If not - create a new subscription.
-            if (m_Subscription == null)
-            {
-                try
-                {
-                    // Create subscription
-                    m_Subscription = m_Server.CreateSubscription("Subscription1", Constants.updaterate, OnDataChange);
-                    btnMonitor.Text = "Stop";
-
-                    // disable changing the itemID
-                    //txtMonitorTags.Enabled = false;
-
-                }
-                catch (Exception exception)
-                {
-                    LogText("Create subscription failed:\n\n" + exception.Message);
-                    return;
-                }
-            }
-            int idx = 0;
-            //all_tags.Clear();
-            foreach (string element in all_tags)
-            {
-                //all_tags.Add(element);
-                // Add item 1
-                try
-                {
-                    m_Subscription.AddItem(
-                        element,
-                        idx);
-                }
-                catch (Exception exception)
-                {
-                    LogText("[" + element + "]," + exception.Message);
-
-                }
-                idx++;
-            }
-        }
-
-        void stopMonitorItems()
-        {
-            if (m_Subscription != null)
-            {
-                try
-                {
-                    m_Server.DeleteSubscription(m_Subscription);
-                    m_Subscription = null;
-
-                    btnMonitor.Text = "Monitor";
-                    //txtMonitorTags.Enabled =  true;
-                }
-                catch (Exception ex)
-                {
-                    LogText("Stopping data monitoring failed:\n\n" + ex.Message);
-                }
-            }
-        }
     }
 }
