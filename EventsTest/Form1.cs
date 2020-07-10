@@ -31,7 +31,7 @@ namespace EventsTest
             // Creates and initializes a new Queue.
             myQ = new Queue();
             // Creates a synchronized wrapper around the Queue.
-            mySyncdQ = Queue.Synchronized(myQ);
+            mySyncdQ = Queue.Synchronized(new Queue());
             rtb1.AppendText(String.Format("myQ is {0}.\n", myQ.IsSynchronized ? "synchronized" : "not synchronized"));
             // Displays the sychronization status of both Queues.
             rtb1.AppendText(String.Format("mySyncdQ is {0}.\n", mySyncdQ.IsSynchronized ? "synchronized" : "not synchronized"));

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Net;
+using System.IO;
 
 namespace Siemens.Opc.DaClient
 {
@@ -20,6 +22,53 @@ namespace Siemens.Opc.DaClient
         {
 
             return filetext;
+        }
+    
+        public static bool CheckServerAccessible(string URL)
+        {
+            bool result = false;
+            
+            Uri myUri = new Uri(URL);
+            // Get host part (host name or address and port). Returns "server:8080".
+
+            var client = new WebClient();
+
+
+            // Specify that the DownloadStringCallback2 method gets called
+            // when the download completes.
+            string mystring = "000";
+
+            // обработчик  результата обращения к серверу
+            client.DownloadStringCompleted +=
+                    (s, hdlr_e) => {
+                        try
+                        {
+                            var resultX = hdlr_e.Result;
+                            mystring = resultX.ToString();
+                        }
+                        catch
+                        {
+                            mystring = "000";
+                        }
+
+                        if (mystring == "777")
+                        {
+                            result = true;
+                        }
+                        
+                    };
+
+
+            try
+            {
+                client.DownloadStringAsync(new Uri("http://" + myUri.Authority));
+            }
+            catch (Exception ex)
+            {
+//                LogText("Stopping data monitoring failed:\n\n" + ex.Message);
+            };
+
+            return result;
         }
 
         public static string UploadFile(string fn, string uriString)

@@ -25,15 +25,14 @@ namespace Siemens.Opc.DaClient
         bool first = true;
         string addr_post;
         string thisAppFolder;
-        ManualResetEvent mre;
+        // Creates a synchronized wrapper around the Queue.
+        static Queue DataChannel = Queue.Synchronized(new Queue());
+        private ThreadedDiskWriter DiskWriterX = new ThreadedDiskWriter(DataChannel);
+
+        private OPCClientCustom ClientOPC = new OPCClientCustom(DataChannel,null, Constants.opc_server_name, 200);
+        
         //ProcessQueue<string> queue = new ProcessQueue<string>(FileHandler);
-        static class Constants
-        {
-            public const int updaterate = 200;
-            public const string opc_server_exe="CCSsmRTServer";
-            public const string opc_server_name = "OPCServer.WinCC.1";
-            const string serverUrl = "opcda://localhost/OPCServer.WinCC.1";
-        } 
+
 
 
         #region Connect and Disconnect Server
@@ -111,11 +110,11 @@ namespace Siemens.Opc.DaClient
         public SimpleClientDA()
         {
             InitializeComponent();
+
             if (!loadConfig())
             {
                 canclose = true;
-
-            };
+            }
             // set the sever we want to connet to
            // txtServerUrl.Text = serverUrl;
 
@@ -388,7 +387,18 @@ namespace Siemens.Opc.DaClient
         private void SimpleClientDA_Shown(object sender, EventArgs e)
         {
             if (first) { 
-                first = false; this.Hide(); 
+                first = false;
+                if (this.canclose) {
+                    Close();
+
+                }
+                //this.Hide(); 
+                ClientOPC.Connect();
+
+                string badlines = ClientOPC.startMonitorItems(this.all_tags);
+                if (badlines != ""){
+                    MessageBox.Show("Tagnames not found: \n"+badlines);
+                };
             }
         }
 
@@ -414,6 +424,7 @@ namespace Siemens.Opc.DaClient
             if (canclose)
             {
                 e.Cancel = false;
+                this.DiskWriterX.StopWrite();
             }
             else { 
                 this.Hide(); 

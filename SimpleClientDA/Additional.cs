@@ -48,6 +48,10 @@ namespace Siemens.Opc.DaClient
         {
             return System.DateTime.Now.ToString("yyyy-MM-dd-HH-mm").Substring(0, 15);
         }
-        
+
+        public static string GetMinuteFileName()
+        {
+            return System.DateTime.Now.ToString("yyyy-MM-dd-HH-mm");
+        }
     }
 }
