@@ -85,12 +85,27 @@ namespace Siemens.Opc.DaClient
                 {
                     result = 1;
                 }
+                if (!this.Connected)
+                {
+                    using (StreamWriter we = File.AppendText("errors.log"))
+                    {
+
+                        we.WriteLine(dtTools.GetNowString() + ": OPC Connected");
+                    }
+                }
+
             }
             catch (Exception ex)
             {
-                using (StreamWriter we = File.AppendText("errors.log"))
+                if (this.Connected)
                 {
-                    we.WriteLine(dtTools.GetNowString() + ": Unexpected error in the Connect:\n\n" + ex.Message);
+
+                    using (StreamWriter we = File.AppendText("errors.log"))
+                    {
+                        this.Connected = false;
+                        we.WriteLine(dtTools.GetNowString() + ": OPC Disconnected");
+                    }
+
                 }
                 result = 2;
             }
@@ -122,7 +137,7 @@ namespace Siemens.Opc.DaClient
                 {
                     using (StreamWriter we = File.AppendText("errors.log"))
                     {
-                        we.WriteLine(dtTools.GetNowString() + ": Unexpected error in the startmonitoritems:\n\n" + ex.Message);
+                        we.WriteLine(dtTools.GetNowString() + ": Unexpected error in the startmonitoritems:\n" + ex.Message);
                     }
                 }
             }
@@ -138,10 +153,10 @@ namespace Siemens.Opc.DaClient
                         element,
                         idx);
                 }
-                catch (Exception ex)
+                catch
                 {
                     result += element + "\n";
-                    //LogText("[" + element + "]," + exception.Message);
+
                 }
                 idx++;
             }
@@ -260,6 +275,10 @@ namespace Siemens.Opc.DaClient
                         string d_line = dtTools.GetNowString() + ";" + all_tags[value.ClientHandle] + ";" + value.Value.ToString() + ";" + value.ToString();
                         // The node succeeded - print the value as string
                         fChannelToDisk.Enqueue(d_line);
+                        if (this.fChannelToForm != null)
+                        {
+                            fChannelToForm.Enqueue(new TagPair(value.ClientHandle, value.Value.ToString()));
+                        }
                     }
 
                 }

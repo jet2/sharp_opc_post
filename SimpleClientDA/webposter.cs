@@ -63,7 +63,7 @@ namespace Siemens.Opc.DaClient
             {
                 client.DownloadStringAsync(new Uri("http://" + myUri.Authority));
             }
-            catch (Exception ex)
+            catch
             {
 //                LogText("Stopping data monitoring failed:\n\n" + ex.Message);
             };
