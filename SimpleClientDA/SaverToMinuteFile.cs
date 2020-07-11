@@ -8,13 +8,14 @@ using System.Text;
 
 namespace Siemens.Opc.DaClient
 {
+    
     class Writer2Disk
     {
         public static bool SaveToMinuteFile(List<string> StringList)
         {
             bool result = false;
 
-            using (StreamWriter w = File.AppendText(dtTools.GetMinuteFileName() + ".json"))
+            using (StreamWriter w = File.AppendText(dtTools.GetMinuteFileName() + "."+Constants.FilesExtension))
             {
                 foreach (string xline in StringList)
                 {
@@ -75,29 +76,37 @@ namespace Siemens.Opc.DaClient
             List<string> translist = new List<string>();
             while (!StopEvent.WaitOne(0))
             {
-                if (ExternalDataChannel == null)
+                try
                 {
-                    continue;
+                    if (ExternalDataChannel == null)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        var zzz = ExternalDataChannel.Count;
+                        try
+                        {
+                            while (zzz > 0)
+                            {
+                                translist.Add(ExternalDataChannel.Dequeue().ToString());
+                                zzz--;
+                            }
+                            if (translist.Count > 0)
+                            {
+                                Writer2Disk.SaveToMinuteFile(translist);
+                            }
+                        }
+                        finally
+                        {
+                            translist.Clear();
+                        }
+                    
+                    }
                 }
-                else
+                finally
                 {
-                    var zzz = ExternalDataChannel.Count;
-                    try
-                    {
-                        while (zzz > 0)
-                        {
-                            translist.Add(ExternalDataChannel.Dequeue().ToString());
-                            zzz--;
-                        }
-                        if (translist.Count > 0)
-                        {
-                            Writer2Disk.SaveToMinuteFile(translist);
-                        }
-                    }
-                    finally
-                    {
-                        translist.Clear();
-                    }
+                    Thread.Sleep(1);
                 }
             }
         }

@@ -1,6 +1,5 @@
-http://localhost:8080/insopcdata
+http://localhost:8080/addfile
 @RM_MASTER
-@RM_MASTER_NAME
 23_1-1_1/23_1-1_1_RUN.Out#Value
 23_1-1_2/23_1-1_2_RUN.Out#Value
 23_1-21_1-5/23_1-21_1-5.Out1#Value

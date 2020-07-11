@@ -15,13 +15,12 @@ namespace Siemens.Opc.DaClient
         public const int updaterate = 200;
         public const string MasterStateTagname = "@RM_MASTER";
         //public const string opc_server_exe = "CCSsmRTServer";
-
         //public const string opc_server_name = "OPCServer.WinCC.1";
         public const string opc_server_name = "easyopc.da2.1";
         public const string opc_server_exe = "easyopc";
         const string serverUrl = "opcda://localhost/OPCServer.WinCC.1";
         public const string serverUrlPrefix = "opcda://localhost/";
-        
+        public const string FilesExtension = "csv";
 
     }
 
@@ -39,6 +38,7 @@ namespace Siemens.Opc.DaClient
         private string fProgId = "";
         private int fScanTime = 200;
         private List<string> all_tags= null;
+        private bool LocalOPCServerIsMaster = false;
         #endregion
 
         public OPCClientCustom(Queue DiskWriterChannel, Queue FormChannel, string progid, int scantime)
@@ -66,10 +66,15 @@ namespace Siemens.Opc.DaClient
                 Connected = true;
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 Connected = false;
-                
+                Disconnect(false);
+                using (StreamWriter we = File.AppendText("errors.log"))
+                {
+
+                    we.WriteLine(dtTools.GetNowString() + "Connect OPC failed."+ ex.Message);
+                }
                 return false;
             }
         }
@@ -80,11 +85,12 @@ namespace Siemens.Opc.DaClient
 
             try
             {
-                DataValue xDataValue = (DataValue) fServer.Read(all_tags[0]);
-                if ((bool)xDataValue.Value)
-                {
+                bool xDataValue =(bool) fServer.Read(all_tags[0]);
+                //string xDataValue = (string)fServer.Read(all_tags[1]);
+                //if (xDataValue)
+                //{
                     result = 1;
-                }
+                //}
                 if (!this.Connected)
                 {
                     using (StreamWriter we = File.AppendText("errors.log"))
@@ -103,7 +109,10 @@ namespace Siemens.Opc.DaClient
                     using (StreamWriter we = File.AppendText("errors.log"))
                     {
                         this.Connected = false;
-                        we.WriteLine(dtTools.GetNowString() + ": OPC Disconnected");
+                        stopMonitorItems();
+                        Disconnect(false);
+
+                        we.WriteLine(dtTools.GetNowString() + ": OPC Disconnected, "+ex.Message);
                     }
 
                 }
@@ -121,7 +130,7 @@ namespace Siemens.Opc.DaClient
         /// Handles connect procedure
         /// </summary>
 
-        public string startMonitorItems(List<string> tags_list)
+        public string startMonitorItems(List<string> tags_list, bool LogErrorsFlag)
         {
             this.all_tags = tags_list;
             string result = "";
@@ -162,9 +171,12 @@ namespace Siemens.Opc.DaClient
             }
             if (result != "")
             {
-                using (StreamWriter we = File.AppendText("errors.log"))
+                if (LogErrorsFlag)
                 {
-                    we.WriteLine(dtTools.GetNowString() + " Tags not found:\n" + result.Replace("\n", "; "));
+                    using (StreamWriter we = File.AppendText("errors.log"))
+                    {
+                        we.WriteLine(dtTools.GetNowString() + " Tags not found:\n" + result.Replace("\n", "; "));
+                    }
                 }
             }
 
@@ -177,17 +189,24 @@ namespace Siemens.Opc.DaClient
             if (fSubscription != null)
             {
                 try
-                {
-                    fServer.DeleteSubscription(fSubscription);
-                    fSubscription = null;
-                }
-                catch (Exception ex)
-                {
-                    result = false;
-                    using (StreamWriter we = File.AppendText("errors.log"))
+                { 
+                    try
                     {
-                        we.WriteLine(dtTools.GetNowString() + " Unexpected error in the stopmonitoritems:\n\n" + ex.Message);
+                        fServer.DeleteSubscription(fSubscription);
+
                     }
+                    catch (Exception ex)
+                    {
+                        result = false;
+                        using (StreamWriter we = File.AppendText("errors.log"))
+                        {
+                            we.WriteLine(dtTools.GetNowString() + " Unexpected error in the stopmonitoritems:\n\n" + ex.Message);
+                        }
+                    }
+                }
+                finally
+                {
+                    fSubscription = null;
                 }
             }
             return result;
@@ -196,7 +215,7 @@ namespace Siemens.Opc.DaClient
         /// <summary>
         /// Handles disconnect procedure
         /// </summary>
-        private void Disconnect()
+        private void Disconnect(bool freeandnil)
         {
 
             if (fServer == null)
@@ -213,7 +232,7 @@ namespace Siemens.Opc.DaClient
                 fServer.Disconnect();
 
                 // Cleanup
-                fServer = null;
+                if (freeandnil) fServer = null;
             }
             catch (Exception ex)
             {
@@ -233,7 +252,7 @@ namespace Siemens.Opc.DaClient
         /// </summary>
         public void ShutDownRequest(string reason)
         {
-            Disconnect();
+            Disconnect(true);
         }
 
         /// <summary>
@@ -256,10 +275,14 @@ namespace Siemens.Opc.DaClient
                 foreach (DataValue value in DataValues)
                 {
                     // 1 is Item1, 2 is Item2, 3 is ItemBlockRead
-
+                    if (value.ClientHandle == 0)
+                    {
+                        LocalOPCServerIsMaster = (bool)value.Value;
+                    }
                     // Print data change information for variable - check first the result code
                     if (value.Error != 0)
                     {
+                        
                         // The node failed - print the symbolic name of the status code
                         string e_line = dtTools.GetNowString() + ";" + all_tags[value.ClientHandle] + " Error: 0x" + value.Error.ToString("X");
                         
@@ -272,7 +295,7 @@ namespace Siemens.Opc.DaClient
                     }
                     else
                     {
-                        string d_line = dtTools.GetNowString() + ";" + all_tags[value.ClientHandle] + ";" + value.Value.ToString() + ";" + value.ToString();
+                        string d_line = dtTools.GetNowString() + ";" + all_tags[value.ClientHandle] + ";" + value.Value.ToString() + ";" + value.Quality.ToString()+";"+ LocalOPCServerIsMaster.ToString();
                         // The node succeeded - print the value as string
                         fChannelToDisk.Enqueue(d_line);
                         if (this.fChannelToForm != null)

@@ -29,11 +29,12 @@ namespace Siemens.Opc.DaClient
         // Creates a synchronized wrapper around the Queue.
         static Queue DataChannel = Queue.Synchronized(new Queue());
         static Queue FormOPCChannel = Queue.Synchronized(new Queue());
+        static Queue WebSenderChannel = Queue.Synchronized(new Queue());
 
         private ThreadedDiskWriter DiskWriterX = new ThreadedDiskWriter(DataChannel);
-
+        private ThreadedWebSenderX WebSenderX;
         private OPCClientCustom ClientOPC = new OPCClientCustom(DataChannel, FormOPCChannel, Constants.opc_server_name, 200);
-
+        
 
         #region Construction
         public SimpleClientDA()
@@ -66,6 +67,10 @@ namespace Siemens.Opc.DaClient
             }
             all_tags.RemoveAt(0); 
             lblWEBaddr.Text = addr_post;
+            if (all_tags[0] != Constants.MasterStateTagname)
+            {
+                all_tags.Insert(0, Constants.MasterStateTagname);
+            };
 
             foreach (string line in all_tags)
             {
@@ -85,35 +90,17 @@ namespace Siemens.Opc.DaClient
         #region Private Members
         private bool canclose = false;
         private string MachineName = Environment.MachineName;
+        private bool AlarmTagnamesConfirmed = false;
+
+        public object ThreadedWebSender { get; private set; }
         #endregion
 
 
 
-        private void txtMonitorResults_TextChanged(object sender, EventArgs e)
-        {
-            if (txtMonitorResults.Lines.Length > 100)
-            {
-                txtMonitorResults.Clear();
-            }
-
-        }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (openFileDialog1.ShowDialog() == DialogResult.OK)
-            {
-               // WebClient client = new WebClient();
 
-                // Add a user agent header in case the
-                // requested URI contains a query.
-                //Thread myThread = new System.Threading.Thread(delegate()
-                //{
-                //    //Your code here
-                //});
-                //myThread.Start();
-                addr_post = "http://localhost:8080/insopcdata";
-                MessageBox.Show(UploaderByPost.UploadFile(openFileDialog1.FileName, addr_post), "Response");
-            }
         }
 
         private void notifyIcon1_DoubleClick(object sender, EventArgs e)
@@ -127,16 +114,11 @@ namespace Siemens.Opc.DaClient
                 first = false;
                 if (this.canclose) {
                     Close();
-
                 }
-                //this.Hide(); 
-                ClientOPC.Connect();
-
-                string badlines = ClientOPC.startMonitorItems(this.all_tags);
-                if (badlines != ""){
-                    MessageBox.Show("Tagnames not found: \n"+badlines);
-                };
-            }
+                //this.Hide();
+                timer_check_opc.Enabled = true;
+                WebSenderX = new ThreadedWebSenderX(WebSenderChannel, addr_post);
+    }
         }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
@@ -162,49 +144,95 @@ namespace Siemens.Opc.DaClient
             {
                 e.Cancel = false;
                 this.DiskWriterX.StopWrite();
+                this.WebSenderX.StopSend();
             }
             else { 
                 this.Hide(); 
             };    
-
-            
         }
 
         private void tmr_post_tick(object sender, EventArgs e)
         {
-            string[] filePaths = Directory.GetFiles(thisAppFolder, "*.json");
+            string[] filePaths = Directory.GetFiles(thisAppFolder, "*."+Constants.FilesExtension);
+
             listBox1.Items.Clear();
             foreach (string str in filePaths){
                 listBox1.Items.Add(Path.GetFileName(str));
             }
-            
+            if (dtTools.GetNowSeconds() == 30)
+            {
+                foreach (string FullPath in filePaths)
+                {
+                    string left = Path.GetFileName(FullPath);
+                    string right = dtTools.GetMinuteFileName() +"."+ Constants.FilesExtension;
+                    if ( left != right)
+                    {
+                        WebSenderChannel.Enqueue(FullPath);
+                    }
+                }
+            }
         }
 
         private void check_exe_timer_Tick(object sender, EventArgs e)
         {
-            tmr_check_exe.Enabled = false;
+            timer_check_opc.Enabled = false;
+            string state = "0";
             try
             {
                 if (dtTools.OPCServerProcessFound())
                 {
-                    string state = ClientOPC.CheckConnect().ToString();
-                    if (state == "1")
+                    try
                     {
-                        lblOPCstate.Text = "OK";
+                        if (!ClientOPC.Connected)
+                        {
+                            if (ClientOPC.Connect())
+                            {
+
+                                string badlines = ClientOPC.startMonitorItems(this.all_tags, !AlarmTagnamesConfirmed);
+
+                                if (badlines != "")
+                                {
+                                    if (!AlarmTagnamesConfirmed)
+                                    {
+                                        AlarmTagnamesConfirmed = true;
+                                        MessageBox.Show("Tagnames not found: \n" + badlines);
+                                    }
+                                }
+                                else
+                                {
+                                    state = ClientOPC.CheckConnect().ToString();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            state = ClientOPC.CheckConnect().ToString();
+                        }
+
                     }
-                    else
+                    catch
                     {
-                        lblOPCstate.Text = "Bad";
-                    }
+                        state = "0";
+                    };
+                    
+
+                }
+                else
+                {
+                    state = "0";
+                }
+            }
+            finally
+            {
+                if (state == "1")
+                {
+                    lblOPCstate.Text = "OK";
                 }
                 else
                 {
                     lblOPCstate.Text = "Bad";
                 }
-            }
-            finally
-            {
-                tmr_check_exe.Enabled= true;
+                timer_check_opc.Enabled= true;
             }
         }
 
@@ -248,7 +276,7 @@ namespace Siemens.Opc.DaClient
             catch (Exception ex)
             {
 
-                LogText("Stopping data monitoring failed:\n\n" + ex.Message);
+                //LogText("Stopping data monitoring failed:\n\n" + ex.Message);
             };
 
         }
@@ -259,12 +287,6 @@ namespace Siemens.Opc.DaClient
 
         }
 
-        void LogText(string output)
-        {
-            txtMonitorResults.AppendText("\r\n" + output);
-            txtMonitorResults.ScrollToCaret();
-
-        }
 
         private void timer_updateTagValues_Tick(object sender, EventArgs e)
         {
@@ -278,12 +300,40 @@ namespace Siemens.Opc.DaClient
                     pair = (TagPair)FormOPCChannel.Dequeue();
 
                     listView1.Items[pair.tagId].SubItems[1].Text = pair.tagValue;
+                    if (pair.tagId == 0){
+                        lblMasterState.Text = pair.tagValue;
+                    };
                     zzz--;
                 }
             }
             finally
             {
                 timer_updateTagValues.Enabled = true;
+            }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void lblWEBstate_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                // WebClient client = new WebClient();
+
+                // Add a user agent header in case the
+                // requested URI contains a query.
+                //Thread myThread = new System.Threading.Thread(delegate()
+                //{
+                //    //Your code here
+                //});
+                //myThread.Start();
+                WebSenderChannel.Enqueue(openFileDialog1.FileName);
+                //addr_post = "http://localhost:8080/addfile";
+                //string xxx = ThreadedWebSenderX.SendFileX(, addr_post);
+                //MessageBox.Show(xxx, "Response");
             }
         }
     }

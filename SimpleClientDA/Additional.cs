@@ -40,7 +40,7 @@ namespace Siemens.Opc.DaClient
         
     class dtTools
     {
-        public string MachineName = Environment.MachineName;
+        public static string MachineName = Environment.MachineName;
 
         public static bool OPCServerProcessFound() {
             return (Process.GetProcessesByName(Constants.opc_server_exe).Length > 0);
@@ -55,6 +55,11 @@ namespace Siemens.Opc.DaClient
         {
             string DateTime = System.DateTime.Now.ToString("dd-MM-yyyy HH:mm:ss.fff");
             return DateTime;
+        }
+
+        public static int GetNowSeconds()
+        {
+            return System.DateTime.Now.Second;
         }
 
 
