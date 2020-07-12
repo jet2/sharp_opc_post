@@ -25,6 +25,7 @@ namespace Siemens.Opc.DaClient
         bool first = true;
         string addr_post;
         string thisAppFolder;
+        string LastCalledMinute = "";
         
         // Creates a synchronized wrapper around the Queue.
         static Queue DataChannel = Queue.Synchronized(new Queue());
@@ -117,8 +118,9 @@ namespace Siemens.Opc.DaClient
                 }
                 //this.Hide();
                 timer_check_opc.Enabled = true;
+                timer_call_to_LastValues.Enabled = true;
                 WebSenderX = new ThreadedWebSenderX(WebSenderChannel, addr_post);
-    }
+            }
         }
 
         private void toolStripMenuItem1_Click(object sender, EventArgs e)
@@ -335,6 +337,39 @@ namespace Siemens.Opc.DaClient
                 //string xxx = ThreadedWebSenderX.SendFileX(, addr_post);
                 //MessageBox.Show(xxx, "Response");
             }
+        }
+
+        private void timer_call_to_LastValues_Tick(object sender, EventArgs e)
+        {
+            timer_call_to_LastValues.Enabled = false;
+            try
+            {
+
+
+                string now5 = "";
+                if (System.DateTime.Now.Minute % 5 == 0)
+                {
+                    now5 = "5";
+                    if (System.DateTime.Now.Minute % 10 == 0)
+                    {
+                        now5 = "0";
+                    }
+                }
+                if (now5 != "")
+                {
+                    if (now5 != LastCalledMinute)
+                    {
+                        LastCalledMinute = now5;
+                        ClientOPC.CallToLastValues();
+                    }
+                }
+            }
+            finally
+            {
+
+                timer_call_to_LastValues.Enabled = true;
+            }
+
         }
     }
 }

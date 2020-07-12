@@ -28,7 +28,9 @@ namespace Siemens.Opc.DaClient
 
     class OPCClientCustom
     {
+
         #region Private Members
+        Dictionary<string, string> lastvalues = new Dictionary<string, string>();
         private Server fServer = null;
         private Subscription fSubscription = null;
         public bool Subscribed = false;
@@ -254,6 +256,18 @@ namespace Siemens.Opc.DaClient
         {
             Disconnect(true);
         }
+        
+        public void CallToLastValues()
+        {
+            if (this.Connected)
+            {
+                foreach (var pair in lastvalues)
+                {
+                    string d_line = dtTools.GetNowString() + ";" + pair.Key + ";" + pair.Value;
+                    fChannelToDisk.Enqueue(d_line);
+                }
+            }
+        }
 
         /// <summary>
         /// callback to receive datachanges
@@ -297,6 +311,7 @@ namespace Siemens.Opc.DaClient
                     {
                         string d_line = dtTools.GetNowString() + ";" + all_tags[value.ClientHandle] + ";" + value.Value.ToString() + ";" + value.Quality.ToString()+";"+ LocalOPCServerIsMaster.ToString();
                         // The node succeeded - print the value as string
+                        lastvalues[all_tags[value.ClientHandle]] = value.Value.ToString() + ";" + value.Quality.ToString() + ";" + LocalOPCServerIsMaster.ToString();
                         fChannelToDisk.Enqueue(d_line);
                         if (this.fChannelToForm != null)
                         {

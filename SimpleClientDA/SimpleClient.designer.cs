@@ -60,6 +60,7 @@ namespace Siemens.Opc.DaClient
             this.x2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label3 = new System.Windows.Forms.Label();
             this.timer_updateTagValues = new System.Windows.Forms.Timer(this.components);
+            this.timer_call_to_LastValues = new System.Windows.Forms.Timer(this.components);
             this.trayMenu.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.statusStrip2.SuspendLayout();
@@ -166,10 +167,10 @@ namespace Siemens.Opc.DaClient
             this.statusStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblOPCprogid,
             this.lblOPCstate});
-            this.statusStrip2.Location = new System.Drawing.Point(0, 454);
+            this.statusStrip2.Location = new System.Drawing.Point(0, 452);
             this.statusStrip2.Name = "statusStrip2";
             this.statusStrip2.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
-            this.statusStrip2.Size = new System.Drawing.Size(501, 22);
+            this.statusStrip2.Size = new System.Drawing.Size(501, 24);
             this.statusStrip2.TabIndex = 31;
             this.statusStrip2.Text = "statusStrip2";
             // 
@@ -177,14 +178,14 @@ namespace Siemens.Opc.DaClient
             // 
             this.lblOPCprogid.AutoSize = false;
             this.lblOPCprogid.Name = "lblOPCprogid";
-            this.lblOPCprogid.Size = new System.Drawing.Size(200, 17);
+            this.lblOPCprogid.Size = new System.Drawing.Size(200, 19);
             this.lblOPCprogid.Text = "[-]";
             this.lblOPCprogid.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             // 
             // lblOPCstate
             // 
             this.lblOPCstate.Name = "lblOPCstate";
-            this.lblOPCstate.Size = new System.Drawing.Size(26, 17);
+            this.lblOPCstate.Size = new System.Drawing.Size(26, 19);
             this.lblOPCstate.Text = "OK";
             // 
             // statusStrip3
@@ -193,7 +194,7 @@ namespace Siemens.Opc.DaClient
             this.statusStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lblWEBaddr,
             this.lblWEBstate});
-            this.statusStrip3.Location = new System.Drawing.Point(0, 430);
+            this.statusStrip3.Location = new System.Drawing.Point(0, 428);
             this.statusStrip3.Name = "statusStrip3";
             this.statusStrip3.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
             this.statusStrip3.Size = new System.Drawing.Size(501, 24);
@@ -205,7 +206,7 @@ namespace Siemens.Opc.DaClient
             // 
             this.lblWEBaddr.AutoSize = false;
             this.lblWEBaddr.Name = "lblWEBaddr";
-            this.lblWEBaddr.Size = new System.Drawing.Size(200, 17);
+            this.lblWEBaddr.Size = new System.Drawing.Size(200, 19);
             this.lblWEBaddr.Text = "[-]";
             this.lblWEBaddr.TextAlign = System.Drawing.ContentAlignment.TopLeft;
             // 
@@ -344,6 +345,11 @@ namespace Siemens.Opc.DaClient
             this.timer_updateTagValues.Enabled = true;
             this.timer_updateTagValues.Tick += new System.EventHandler(this.timer_updateTagValues_Tick);
             // 
+            // timer_call_to_LastValues
+            // 
+            this.timer_call_to_LastValues.Interval = 250;
+            this.timer_call_to_LastValues.Tick += new System.EventHandler(this.timer_call_to_LastValues_Tick);
+            // 
             // SimpleClientDA
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -410,6 +416,7 @@ namespace Siemens.Opc.DaClient
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem6;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem7;
         private System.Windows.Forms.Timer timer_updateTagValues;
+        private System.Windows.Forms.Timer timer_call_to_LastValues;
     }
 }
 
