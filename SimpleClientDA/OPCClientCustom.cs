@@ -14,10 +14,10 @@ namespace Siemens.Opc.DaClient
     {
         public const int updaterate = 200;
         public const string MasterStateTagname = "@RM_MASTER";
-        //public const string opc_server_exe = "CCSsmRTServer";
-        //public const string opc_server_name = "OPCServer.WinCC.1";
-        public const string opc_server_name = "easyopc.da2.1";
-        public const string opc_server_exe = "easyopc";
+        public const string opc_server_exe = "CCSsmRTServer";
+        public const string opc_server_name = "OPCServer.WinCC.1";
+        //public const string opc_server_name = "easyopc.da2.1";
+        //public const string opc_server_exe = "easyopc";
         const string serverUrl = "opcda://localhost/OPCServer.WinCC.1";
         public const string serverUrlPrefix = "opcda://localhost/";
         public const string FilesExtension = "csv";
@@ -276,6 +276,7 @@ namespace Siemens.Opc.DaClient
         /// <param name="value"></param>
         private void OnDataChange(IList<DataValue> DataValues)
         {
+            DataValue testvalue= null;
             try
             {
                 //// We have to call an invoke method 
@@ -288,6 +289,7 @@ namespace Siemens.Opc.DaClient
 
                 foreach (DataValue value in DataValues)
                 {
+                    testvalue = value;
                     // 1 is Item1, 2 is Item2, 3 is ItemBlockRead
                     if (value.ClientHandle == 0)
                     {
@@ -325,7 +327,9 @@ namespace Siemens.Opc.DaClient
             {
                 using (StreamWriter we = File.AppendText("errors.log"))
                 {
-                    we.WriteLine(dtTools.GetNowString() + " Unexpected error in the data change callback:\n\n" + ex.Message);
+                    
+                    
+                    we.WriteLine(dtTools.GetNowString() +" Item["+ testvalue.ClientHandle.ToString() + "] ["+ all_tags[testvalue.ClientHandle] + "] Unexpected error in the data change callback:\n\n" + ex.Message);
                 }
             }
         }

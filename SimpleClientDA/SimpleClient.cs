@@ -116,7 +116,7 @@ namespace Siemens.Opc.DaClient
                 if (this.canclose) {
                     Close();
                 }
-                //this.Hide();
+                this.Hide();
                 timer_check_opc.Enabled = true;
                 timer_call_to_LastValues.Enabled = true;
                 WebSenderX = new ThreadedWebSenderX(WebSenderChannel, addr_post);
